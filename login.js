@@ -1,3 +1,5 @@
+//Login logic , retrieve data from user (email, password) and compare it with data from the API
+//If email and password exist and are correct , user will be connected.Else an error will be shown
 document
   .getElementById("login-form")
   .addEventListener("submit", async function (event) {
@@ -17,7 +19,7 @@ document
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Connexion réussie", data);
+        //Store the connexion token , token will be erased automatically when user close web browser
         sessionStorage.setItem("token", data.token);
         window.location.href = "/index.html";
       } else {
@@ -25,6 +27,6 @@ document
         throw new Error("Email or password is incorrect");
       }
     } catch (error) {
-      console.error("Server doesn't respond", error);
+      console.error("Server doesn't respond", error); //Throw an error when communication with server is not possible
     }
   });
