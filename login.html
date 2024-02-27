@@ -12,6 +12,8 @@
     />
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
+    <script src="login.js" defer></script>
+    <script src="authentification.js" defer></script>
   </head>
   <body>
     <header>
@@ -20,7 +22,7 @@
         <ul>
           <li>projets</li>
           <li>contact</li>
-          <li class="actual-page" id="login">login</li>
+          <li class="actual-page" id="login-link">login</li>
           <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
         </ul>
       </nav>
@@ -28,11 +30,11 @@
     <main>
       <section id="login">
         <h2>Login</h2>
-        <form action="#" method="post">
+        <form method="post" id="login-form">
           <label for="email">Email</label>
-          <input type="email" name="email" id="email" />
+          <input type="email" name="email" id="email" required />
           <label for="password">Mot de passe</label>
-          <input name="password" id="password" id="password" />
+          <input name="password" id="password" type="password" required />
           <input type="submit" value="Envoyer" />
           <a href="#" class="forgot-password">Mot de passe oublié</a>
         </form>
