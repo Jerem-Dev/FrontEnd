@@ -256,6 +256,10 @@ li.actual-page {
   width: 50%;
   margin: auto;
 }
+#login {
+  width: 35%;
+}
+
 #contact > *,
 #login > * {
   text-align: center;
