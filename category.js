@@ -1,4 +1,4 @@
-// Get categories from API
+// Get works categories information
 async function getCategories() {
   try {
     const fetchCategories = await fetch("http://localhost:5678/api/categories");

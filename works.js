@@ -6,9 +6,9 @@ try {
 } catch (error) {
   console.error("Failed to fetch data from API", error);
 }
-
 console.table(works);
-//Update works in the DOM by creating a figure who contains and img and a figcaption
+
+//Update the DOM by creating a <figure> for each works
 function updateWorks(works) {
   const gallery = document.querySelector(".gallery");
 
@@ -27,6 +27,7 @@ function updateWorks(works) {
 
 updateWorks(works);
 
+//CategoryId definition => 1 : Objects | 2 : Appartments | 3 Hotel & restaurant
 // Show all works
 const allFilter = document.querySelector("#all");
 allFilter.addEventListener("click", function () {
@@ -34,7 +35,7 @@ allFilter.addEventListener("click", function () {
   updateWorks(works);
 });
 
-// Show only works who are objects
+// Sort works show objects
 const objectsFilter = document.querySelector("#objects");
 objectsFilter.addEventListener("click", function () {
   const objectsWorks = works.filter((work) => work.categoryId === 1);
@@ -42,7 +43,7 @@ objectsFilter.addEventListener("click", function () {
   updateWorks(objectsWorks);
 });
 
-//Show only works who are appartment
+//Sort works to show only appartments
 const appartmentFilter = document.querySelector("#appartment");
 appartmentFilter.addEventListener("click", function () {
   const appartmentWorks = works.filter((work) => work.categoryId === 2);
@@ -50,7 +51,7 @@ appartmentFilter.addEventListener("click", function () {
   updateWorks(appartmentWorks);
 });
 
-//Show only works who are hotels or restaurants
+//Sort works to show only hotels or restaurants
 const hotelRestaurantFilter = document.querySelector("#hotel-restaurant");
 hotelRestaurantFilter.addEventListener("click", function () {
   const hotelRestaurantWorks = works.filter((work) => work.categoryId === 3);
