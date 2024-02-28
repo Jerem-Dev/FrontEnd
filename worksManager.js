@@ -20,3 +20,17 @@ if (logged) {
 } else {
   portfolio.removeChild(worksManager);
 }
+
+worksManager.addEventListener("click", function (event) {
+  event.preventDefault();
+  document.querySelector(".modal").style.visibility = "visible";
+  document.querySelector(".modal").style.opacity = "1";
+});
+
+const closeModal = document.querySelector(".modal_close");
+
+closeModal.addEventListener("click", function (event) {
+  event.preventDefault();
+  document.querySelector(".modal").style.visibility = "hidden";
+  document.querySelector(".modal").style.opacity = "0";
+});
