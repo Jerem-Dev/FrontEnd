@@ -90,6 +90,8 @@ video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+  text-decoration: inherit;
+  color: inherit;
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -177,6 +179,9 @@ nav li {
 li:hover {
   color: #b1663c;
 }
+li.actual-page {
+  font-weight: 900;
+}
 #introduction {
   display: flex;
   align-items: center;
@@ -245,35 +250,58 @@ li:hover {
 .gallery img {
   width: 100%;
 }
-#contact {
+
+#contact,
+#login {
   width: 50%;
   margin: auto;
 }
-#contact > * {
+#login {
+  width: 35%;
+}
+
+#contact > *,
+#login > * {
   text-align: center;
 }
 #contact h2 {
   margin-bottom: 20px;
 }
-#contact form {
+#login h2 {
+  margin-top: 100px;
+}
+#contact form,
+#login form {
   text-align: left;
   margin-top: 30px;
   display: flex;
   flex-direction: column;
 }
+#login form {
+  margin-top: 0px;
+}
 
-#contact input {
+#login a {
+  text-align: center;
+}
+#contact input,
+#login input {
   height: 50px;
   font-size: 1.2em;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+#contact label,
+#login label {
   margin: 2em 0 1em 0;
 }
 #contact textarea {
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.forgot-password {
+  text-decoration: underline;
 }
 
 input[type="submit"] {
