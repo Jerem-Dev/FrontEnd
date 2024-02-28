@@ -10,8 +10,8 @@ export function isLogged() {
       event.preventDefault();
       sessionStorage.removeItem("token");
       window.location.reload();
-      return true;
     });
+    return true;
   } else {
     loginLink.innerText = "login";
     return false;
