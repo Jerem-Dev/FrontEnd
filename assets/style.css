@@ -386,4 +386,5 @@ footer nav ul {
 
 .modal_trash:hover {
   background-color: gray;
+  cursor: pointer;
 }

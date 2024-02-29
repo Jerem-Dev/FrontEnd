@@ -1,6 +1,8 @@
 import { isLogged } from "/authentification.js";
 import { works } from "/works.js";
+import { token } from "/authentification.js";
 
+console.log(token);
 //Control if user is connected (true) or not (false)
 const logged = isLogged();
 console.log(logged);
@@ -16,14 +18,6 @@ imgWorksManager.style.marginRight = "5px";
 worksManager.innerText = "modifier";
 worksManager.href = "#";
 worksManager.style.marginLeft = "15px";
-
-//Show the link to worksManager only if user is connected
-if (logged) {
-  portfolio.appendChild(worksManager);
-  worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
-} else {
-  portfolio.removeChild(worksManager);
-}
 
 //Events for open or close modal window
 const closeModal = document.querySelector(".modal_close");
@@ -51,13 +45,23 @@ function updateWorksManagerGallery(works) {
     imgModal.className = "img-works-manager";
     trashImgModal.src = "assets/icons/trash-can-regular.svg";
     trashImgModal.className = "modal_trash";
+    trashImgModal.id = work.id;
     modalContent.appendChild(divImgContent);
     divImgContent.appendChild(imgModal);
     divImgContent.appendChild(trashImgModal);
   });
 }
 
-updateWorksManagerGallery(works);
+const trashIcons = document.querySelectorAll(".modal_trash");
+trashIcons.forEach((trashIcon) => {
+  trashIcon.addEventListener("click", function () {
+    alert(this.id);
+  });
+});
 
-const trashImg = document.querySelector(".modal_trash");
-trashImg.addEventListener("click", function () {});
+//Show the link to worksManager and retrieve his content only if user is connected
+if (logged) {
+  portfolio.appendChild(worksManager);
+  worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
+  updateWorksManagerGallery(works);
+}
