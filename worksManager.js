@@ -1,8 +1,15 @@
 import { isLogged } from "/authentification.js";
-import { works } from "/works.js";
+import { works, fetchWorks, updateWorks } from "/works.js";
 import { token } from "/authentification.js";
 
+async function refreshWorks() {
+  const works = await fetchWorks();
+  updateWorks(works);
+  updateWorksManagerGallery(works);
+}
+
 console.log(token);
+
 //Control if user is connected (true) or not (false)
 const logged = isLogged();
 console.log(logged);
@@ -52,16 +59,24 @@ function updateWorksManagerGallery(works) {
   });
 }
 
-const trashIcons = document.querySelectorAll(".modal_trash");
-trashIcons.forEach((trashIcon) => {
-  trashIcon.addEventListener("click", function () {
-    alert(this.id);
-  });
-});
-
 //Show the link to worksManager and retrieve his content only if user is connected
 if (logged) {
   portfolio.appendChild(worksManager);
   worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
   updateWorksManagerGallery(works);
 }
+
+const trashIcons = document.querySelectorAll(".modal_trash");
+trashIcons.forEach((trashIcon) => {
+  trashIcon.addEventListener("click", function () {
+    fetch(`http://localhost:5678/api/works/${this.id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    document.querySelector(".modal_gallery").innerHTML = "";
+    document.querySelector(".gallery").innerHTML = "";
+    refreshWorks();
+  });
+});

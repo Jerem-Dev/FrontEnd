@@ -1,15 +1,22 @@
 //Get all the works stored in the API and transform the data in JSON
-export let works = {};
-try {
-  const fetchWorks = await fetch("http://localhost:5678/api/works");
-  works = await fetchWorks.json();
-} catch (error) {
-  console.error("Failed to fetch data from API", error);
+
+export async function fetchWorks() {
+  let works = {};
+  try {
+    const response = await fetch("http://localhost:5678/api/works");
+    works = await response.json();
+    return works;
+  } catch (error) {
+    console.error("Failed to fetch data from API", error);
+  }
 }
+
+export let works = await fetchWorks();
+
 console.table(works);
 
 //Update the DOM by creating a <figure> for each works
-function updateWorks(works) {
+export function updateWorks(works) {
   const gallery = document.querySelector(".gallery");
 
   works.forEach((work) => {
