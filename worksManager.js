@@ -57,26 +57,28 @@ function updateWorksManagerGallery(works) {
     divImgContent.appendChild(imgModal);
     divImgContent.appendChild(trashImgModal);
   });
+  listenerDeleteWork();
 }
 
+function listenerDeleteWork() {
+  const trashIcons = document.querySelectorAll(".modal_trash");
+  trashIcons.forEach((trashIcon) => {
+    trashIcon.addEventListener("click", function () {
+      fetch(`http://localhost:5678/api/works/${this.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      document.querySelector(".modal_gallery").innerHTML = "";
+      document.querySelector(".gallery").innerHTML = "";
+      refreshWorks();
+    });
+  });
+}
 //Show the link to worksManager and retrieve his content only if user is connected
 if (logged) {
   portfolio.appendChild(worksManager);
   worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
   updateWorksManagerGallery(works);
 }
-
-const trashIcons = document.querySelectorAll(".modal_trash");
-trashIcons.forEach((trashIcon) => {
-  trashIcon.addEventListener("click", function () {
-    fetch(`http://localhost:5678/api/works/${this.id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    document.querySelector(".modal_gallery").innerHTML = "";
-    document.querySelector(".gallery").innerHTML = "";
-    refreshWorks();
-  });
-});
