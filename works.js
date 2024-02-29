@@ -1,5 +1,5 @@
 //Get all the works stored in the API and transform the data in JSON
-let works = {};
+export let works = {};
 try {
   const fetchWorks = await fetch("http://localhost:5678/api/works");
   works = await fetchWorks.json();
@@ -14,13 +14,13 @@ function updateWorks(works) {
 
   works.forEach((work) => {
     const figure = document.createElement("figure");
-    gallery.appendChild(figure);
     const imgFigure = document.createElement("img");
+    const imgFigcaption = document.createElement("figcaption");
     imgFigure.src = work.imageUrl;
     imgFigure.alt = work.title;
-    figure.appendChild(imgFigure);
-    const imgFigcaption = document.createElement("figcaption");
     imgFigcaption.textContent = work.title;
+    gallery.appendChild(figure);
+    figure.appendChild(imgFigure);
     figure.appendChild(imgFigcaption);
   });
 }

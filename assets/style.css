@@ -344,12 +344,26 @@ footer nav ul {
 }
 
 .modal_content {
-  border-radius: 4px;
   position: relative;
+  border-radius: 4px;
   width: 500px;
   max-width: 90%;
   background: white;
   padding: 1.5em 2em;
+}
+
+.modal_gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.content_img {
+  position: relative;
+}
+
+.img-works-manager {
+  height: 110px;
+  width: 90px;
 }
 
 .modal_close {
@@ -359,7 +373,17 @@ footer nav ul {
   text-decoration: none;
 }
 
-.modal:target {
-  visibility: visible;
-  opacity: 1;
+.modal_trash {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  height: 15px;
+  width: 15px;
+  background-color: black;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+.modal_trash:hover {
+  background-color: gray;
 }
