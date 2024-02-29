@@ -2,6 +2,7 @@ import { isLogged } from "/authentification.js";
 import { works, fetchWorks, updateWorks } from "/works.js";
 import { token } from "/authentification.js";
 
+//Function to refresh gallery automatically when user delete one item
 async function refreshWorks() {
   const works = await fetchWorks();
   updateWorks(works);
@@ -40,6 +41,7 @@ closeModal.addEventListener("click", function (event) {
   document.querySelector(".modal").style.opacity = "0";
 });
 
+//Show gallery and add possibility to delete one or several work
 function updateWorksManagerGallery(works) {
   const modalContent = document.querySelector(".modal_gallery");
   works.forEach((work) => {
@@ -59,7 +61,7 @@ function updateWorksManagerGallery(works) {
   });
   listenerDeleteWork();
 }
-
+//Listen to what items should be delete on user clic
 function listenerDeleteWork() {
   const trashIcons = document.querySelectorAll(".modal_trash");
   trashIcons.forEach((trashIcon) => {
@@ -76,6 +78,7 @@ function listenerDeleteWork() {
     });
   });
 }
+
 //Show the link to worksManager and retrieve his content only if user is connected
 if (logged) {
   portfolio.appendChild(worksManager);
