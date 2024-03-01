@@ -54,6 +54,7 @@ function updateWorksManagerGallery(works) {
     divImgContent.appendChild(trashImgModal);
   });
   listenerDeleteWork();
+  listenerCloseModal();
 }
 //Listen to what items should be delete on user clic
 function listenerDeleteWork() {
@@ -78,18 +79,21 @@ if (logged) {
   portfolio.appendChild(worksManager);
   worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
   updateWorksManagerGallery(works);
+  listenerCloseModal();
 }
 
 //Events for open or close modal window
-const closeModal = document.querySelector(".modal_close");
 worksManager.addEventListener("click", function (event) {
   event.preventDefault();
   document.querySelector(".modal").style.visibility = "visible";
   document.querySelector(".modal").style.opacity = "1";
 });
 
-closeModal.addEventListener("click", function (event) {
-  event.preventDefault();
-  document.querySelector(".modal").style.visibility = "hidden";
-  document.querySelector(".modal").style.opacity = "0";
-});
+function listenerCloseModal() {
+  const closeModal = document.querySelector(".modal_close");
+  closeModal.addEventListener("click", function (event) {
+    event.preventDefault();
+    document.querySelector(".modal").style.visibility = "hidden";
+    document.querySelector(".modal").style.opacity = "0";
+  });
+}
