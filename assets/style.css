@@ -343,27 +343,38 @@ footer nav ul {
   background: rgba(77, 77, 77, 0.7);
 }
 
-.modal_content {
+.modal_container {
   position: relative;
   border-radius: 4px;
-  width: 500px;
+  width: 550px;
   max-width: 90%;
   background: white;
-  padding: 1.5em 2em;
+  padding: 30px 100px;
+}
+.modal_title {
+  width: 100%;
+  font-size: 26px;
+  text-align: center;
+  margin: 25px 0 50px;
 }
 
 .modal_gallery {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
 }
 
 .content_img {
   position: relative;
+  height: auto;
+  width: 18%;
 }
 
 .img-works-manager {
-  height: 110px;
-  width: 90px;
+  height: auto;
+  width: 100%;
+  margin: 0px 10px;
 }
 
 .modal_close {
@@ -376,7 +387,7 @@ footer nav ul {
 .modal_trash {
   position: absolute;
   top: 5px;
-  right: 5px;
+  right: -5px;
   height: 15px;
   width: 15px;
   background-color: black;

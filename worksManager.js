@@ -27,22 +27,16 @@ worksManager.innerText = "modifier";
 worksManager.href = "#";
 worksManager.style.marginLeft = "15px";
 
-//Events for open or close modal window
-const closeModal = document.querySelector(".modal_close");
-worksManager.addEventListener("click", function (event) {
-  event.preventDefault();
-  document.querySelector(".modal").style.visibility = "visible";
-  document.querySelector(".modal").style.opacity = "1";
-});
-
-closeModal.addEventListener("click", function (event) {
-  event.preventDefault();
-  document.querySelector(".modal").style.visibility = "hidden";
-  document.querySelector(".modal").style.opacity = "0";
-});
-
 //Show gallery and add possibility to delete one or several work
 function updateWorksManagerGallery(works) {
+  const modalContainer = document.querySelector(".modal_container");
+  const modalGallery = document.createElement("div");
+  modalGallery.className = "modal_gallery";
+  modalContainer.innerHTML = `
+  <a href="#" class="modal_close">&times;</a>
+  <p class= "modal_title">Galerie photo</p>
+  `;
+  modalContainer.appendChild(modalGallery);
   const modalContent = document.querySelector(".modal_gallery");
   works.forEach((work) => {
     const divImgContent = document.createElement("div");
@@ -72,7 +66,7 @@ function listenerDeleteWork() {
           Authorization: `Bearer ${token}`,
         },
       });
-      document.querySelector(".modal_gallery").innerHTML = "";
+      document.querySelector(".modal_container").innerHTML = "";
       document.querySelector(".gallery").innerHTML = "";
       refreshWorks();
     });
@@ -85,3 +79,17 @@ if (logged) {
   worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
   updateWorksManagerGallery(works);
 }
+
+//Events for open or close modal window
+const closeModal = document.querySelector(".modal_close");
+worksManager.addEventListener("click", function (event) {
+  event.preventDefault();
+  document.querySelector(".modal").style.visibility = "visible";
+  document.querySelector(".modal").style.opacity = "1";
+});
+
+closeModal.addEventListener("click", function (event) {
+  event.preventDefault();
+  document.querySelector(".modal").style.visibility = "hidden";
+  document.querySelector(".modal").style.opacity = "0";
+});
