@@ -59,7 +59,7 @@ worksManager.innerText = "modifier";
 worksManager.href = "#";
 worksManager.style.marginLeft = "15px";
 
-//Show gallery and add possibility to delete one or several work
+//WORK MANAGER CONSTRUCTOR : Show gallery and add possibility to delete one or several work
 async function updateWorksManagerGallery() {
   const upToDateWorks = await refreshWorks();
   const modalContainer = document.querySelector(".modal_container");
@@ -72,7 +72,7 @@ async function updateWorksManagerGallery() {
   modalContainer.appendChild(modalGallery);
 
   const linkContainer = document.createElement("div");
-  linkContainer.className = "modal-link-container";
+  linkContainer.className = "modal-button-container";
   modalContainer.appendChild(linkContainer);
 
   const linkAddWork = document.createElement("button");
@@ -99,6 +99,7 @@ async function updateWorksManagerGallery() {
   });
   listenerDeleteWork();
   listenerCloseModal();
+  listerButtonAddWork();
 }
 //Listen to what items should be delete on user clic and refresh galleries after deleting an item
 function listenerDeleteWork() {
@@ -118,9 +119,55 @@ function listenerDeleteWork() {
     });
   });
 }
-//-------------------WORK MANAGER ADD----------------------//
 
-const buttonAddWork = document.getElementById("add-work");
+//---------------------WORK MANAGER ADD--------------------//
+function addWorkFormModal() {
+  const workAddManager = document.querySelector(".modal-add-container");
+  workAddManager.innerHTML = ` 
+  <a href="#" class="modal_close">&times;</a>
+  <a href="#" class="modal-return">&larr;</a>
+  `;
+
+  const addForm = document.createElement("div");
+  addForm.className = "add-work-form";
+  workAddManager.appendChild(addForm);
+
+  const modalFormContainer = document.createElement("div");
+  modalFormContainer.className = "add-form";
+  modalFormContainer.innerHTML = `
+  <form id="add-photo-form" enctype="multipart/form-data">
+  <p class="modal_title">Ajout photo</p>
+  <div>
+      <label for="photo">Photo:</label>
+      <input type="file" id="photo" name="photo" accept=".png, .jpg" required>
+  </div>
+  <div>
+      <label for="title">Titre:</label>
+      <input type="text" id="title" name="title" required>
+  </div>
+  <div>
+      <label for="category">Categorie :</label>
+      <select id="category" name="category" required>
+          <option value="1">Objets</option>
+          <option value="2">Appartements</option>
+          <option value="3">Hôtels & restaurants</option>
+      </select>
+  </div>
+</form>`;
+  workAddManager.appendChild(modalFormContainer);
+  const addButtonContainer = document.createElement("div");
+  addButtonContainer.classList = "modal-button-container";
+  workAddManager.appendChild(addButtonContainer);
+
+  const submitAddButton = document.createElement("button");
+  submitAddButton.className = "modal-button";
+  submitAddButton.id = "submit-work";
+  submitAddButton.style.backgroundColor = "#A7A7A7";
+  submitAddButton.textContent = "Valider";
+  addButtonContainer.appendChild(submitAddButton);
+
+  listenerCloseAddWorkModal();
+}
 //-----------------USER AUTHENFICATION CHECK---------------//
 
 //Control if user is connected (true) or not (false)
@@ -132,10 +179,11 @@ if (logged) {
   portfolio.appendChild(worksManager);
   worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
   updateWorksManagerGallery();
+  addWorkFormModal();
 }
 console.log(token);
 
-//--------------WORK GALLERY OPEN/CLOSE---------------//
+//--------------WORK GALLERY DELETE OPEN/CLOSE---------------//
 
 //Events for open or close modal window
 worksManager.addEventListener("click", function (event) {
@@ -153,9 +201,39 @@ function listenerCloseModal() {
   });
 }
 
+//-------------------WORK MANAGER ADD OPEN/CLOSE----------------------//
+
+function listerButtonAddWork() {
+  const buttonAddWork = document.getElementById("add-work");
+  buttonAddWork.addEventListener("click", function (event) {
+    event.preventDefault();
+    document.querySelector(".modal").style.visibility = "hidden";
+    document.querySelector(".modal").style.opacity = "0";
+    document.querySelector(".modal-add").style.visibility = "visible";
+    document.querySelector(".modal-add").style.opacity = "1";
+  });
+}
+
+const backToWorkManager = document.querySelector(".modal-return");
+backToWorkManager.addEventListener("click", function (event) {
+  event.preventDefault();
+  document.querySelector(".modal").style.visibility = "visible";
+  document.querySelector(".modal").style.opacity = "1";
+  document.querySelector(".modal-add").style.visibility = "hidden";
+  document.querySelector(".modal-add").style.opacity = "0";
+});
+
+function listenerCloseAddWorkModal() {
+  const closeModal = document.querySelector(".modal_close");
+  closeModal.addEventListener("click", function (event) {
+    event.preventDefault();
+    document.querySelector(".modal-add").style.visibility = "hidden";
+    document.querySelector(".modal-add").style.opacity = "0";
+  });
+}
 //-----------------------------WORKS FILTERS----------------------------------------//
 //CategoryId definition => 1 : Objects | 2 : Appartments | 3 Hotel & restaurant
-let currentFilter = null;
+let currentFilter = "all";
 
 //Reminder of current filter to update correctly the gallery when a work is added or deleted
 async function updateGalleryCurrentFilter() {
