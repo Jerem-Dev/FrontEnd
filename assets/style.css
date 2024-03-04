@@ -399,3 +399,27 @@ footer nav ul {
   background-color: gray;
   cursor: pointer;
 }
+
+.modal-link-container {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 50px;
+  border-top: solid lightgray 1px;
+  padding-top: 50px;
+}
+
+.modal-button {
+  border-radius: 60px;
+  width: 237px;
+  height: 36px;
+  font-family: "Syne";
+  border: none;
+  background-color: #1d6154;
+  color: white;
+}
+
+.modal-button:hover {
+  filter: brightness(1.4);
+  cursor: pointer;
+}

@@ -12,6 +12,13 @@ async function fetchWorks() {
     console.error("Failed to fetch data from API", error);
   }
 }
+
+//Function for refreshing gallery automatically when user delete one item
+async function refreshWorks() {
+  const works = await fetchWorks();
+  return works;
+}
+
 let works = await fetchWorks();
 
 console.table(works);
@@ -38,19 +45,7 @@ function updateWorks(works) {
 
 updateWorks(works);
 
-// ----------------------------------------------- //
-
-//Function to refresh gallery automatically when user delete one item
-async function refreshWorks() {
-  const works = await fetchWorks();
-  return works;
-}
-
-console.log(token);
-
-//Control if user is connected (true) or not (false)
-const logged = isLogged();
-console.log(logged);
+//---------------------WORK MANAGER DELETE---------------------------//
 
 //Create the "modifier" link
 const portfolio = document.querySelector(".projets");
@@ -75,7 +70,18 @@ async function updateWorksManagerGallery() {
   <p class= "modal_title">Galerie photo</p>
   `;
   modalContainer.appendChild(modalGallery);
-  const modalContent = document.querySelector(".modal_gallery");
+
+  const linkContainer = document.createElement("div");
+  linkContainer.className = "modal-link-container";
+  modalContainer.appendChild(linkContainer);
+
+  const linkAddWork = document.createElement("button");
+  linkAddWork.textContent = "Ajouter une photo";
+  linkAddWork.className = "modal-button";
+  linkAddWork.id = "add-work";
+  linkContainer.appendChild(linkAddWork);
+
+  const modalGalleryContent = document.querySelector(".modal_gallery");
   upToDateWorks.forEach((work) => {
     const divImgContent = document.createElement("div");
     const imgModal = document.createElement("img");
@@ -87,19 +93,19 @@ async function updateWorksManagerGallery() {
     trashImgModal.src = "assets/icons/trash-can-regular.svg";
     trashImgModal.className = "modal_trash";
     trashImgModal.id = work.id;
-    modalContent.appendChild(divImgContent);
+    modalGalleryContent.appendChild(divImgContent);
     divImgContent.appendChild(imgModal);
     divImgContent.appendChild(trashImgModal);
   });
   listenerDeleteWork();
   listenerCloseModal();
 }
-//Listen to what items should be delete on user clic
+//Listen to what items should be delete on user clic and refresh galleries after deleting an item
 function listenerDeleteWork() {
   const trashIcons = document.querySelectorAll(".modal_trash");
   trashIcons.forEach((trashIcon) => {
     trashIcon.addEventListener("click", async function () {
-      fetch(`http://localhost:5678/api/works/${this.id}`, {
+      await fetch(`http://localhost:5678/api/works/${this.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -107,19 +113,29 @@ function listenerDeleteWork() {
       });
       document.querySelector(".modal_container").innerHTML = "";
       document.querySelector(".gallery").innerHTML = "";
-      const updatedWorks = await refreshWorks();
-      updateWorksManagerGallery(updatedWorks);
-      updateGalleryCurrentFilter();
+      await updateWorksManagerGallery();
+      await updateGalleryCurrentFilter();
     });
   });
 }
+//-------------------WORK MANAGER ADD----------------------//
+
+const buttonAddWork = document.getElementById("add-work");
+//-----------------USER AUTHENFICATION CHECK---------------//
+
+//Control if user is connected (true) or not (false)
+const logged = isLogged();
+console.log(logged);
 
 //Show the link to worksManager and retrieve his content only if user is connected
 if (logged) {
   portfolio.appendChild(worksManager);
   worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
-  updateWorksManagerGallery(works);
+  updateWorksManagerGallery();
 }
+console.log(token);
+
+//--------------WORK GALLERY OPEN/CLOSE---------------//
 
 //Events for open or close modal window
 worksManager.addEventListener("click", function (event) {
@@ -137,7 +153,8 @@ function listenerCloseModal() {
   });
 }
 
-//-----------------------------FILTER SECTION----------------------------------------//
+//-----------------------------WORKS FILTERS----------------------------------------//
+//CategoryId definition => 1 : Objects | 2 : Appartments | 3 Hotel & restaurant
 let currentFilter = null;
 
 //Reminder of current filter to update correctly the gallery when a work is added or deleted
@@ -168,7 +185,6 @@ async function updateGalleryCurrentFilter() {
   }
 }
 
-//CategoryId definition => 1 : Objects | 2 : Appartments | 3 Hotel & restaurant
 // Show all works
 const allFilter = document.querySelector("#all");
 allFilter.addEventListener("click", async function () {
