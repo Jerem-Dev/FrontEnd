@@ -21,8 +21,6 @@ async function refreshWorks() {
 
 let works = await fetchWorks();
 
-console.table(works);
-
 //---------------------GALLERY -------------------//
 
 //Update the DOM by creating a <figure> for each works
@@ -287,7 +285,6 @@ function formListener() {
 
 //Control if user is connected (true) or not (false)
 const logged = isLogged();
-console.log(logged);
 
 //Show the link to worksManager and retrieve his content only if user is connected
 if (logged) {
@@ -296,7 +293,6 @@ if (logged) {
   updateWorksManagerGallery();
   addWorkFormModal();
 }
-console.log(token);
 
 //--------------WORK GALLERY DELETE OPEN/CLOSE---------------//
 
