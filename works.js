@@ -110,12 +110,15 @@ function listenerDeleteWork() {
           Authorization: `Bearer ${token}`,
         },
       });
-      document.querySelector(".modal_container").innerHTML = "";
-      document.querySelector(".gallery").innerHTML = "";
+      cleanGalleries();
       await updateWorksManagerGallery();
       await updateGalleryCurrentFilter();
     });
   });
+}
+function cleanGalleries() {
+  document.querySelector(".modal_container").innerHTML = "";
+  document.querySelector(".gallery").innerHTML = "";
 }
 
 //---------------------WORK MANAGER ADD--------------------//
@@ -241,8 +244,7 @@ async function addPhoto() {
     submitAddButton.style.backgroundColor = "#A7A7A7";
     submitAddButton.onclick = null;
 
-    document.querySelector(".modal_container").innerHTML = "";
-    document.querySelector(".gallery").innerHTML = "";
+    cleanGalleries();
     await updateWorksManagerGallery();
     await updateGalleryCurrentFilter();
   } catch (error) {
