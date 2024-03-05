@@ -173,6 +173,7 @@ function addWorkFormModal() {
   addButtonContainer.appendChild(submitAddButton);
 
   listenerCloseAddWorkModal();
+  listenerBackArrowModal();
   formListener();
   listenerPhotoUpload();
 }
@@ -326,15 +327,17 @@ function listerButtonAddWork() {
   });
 }
 
-const backToWorkManager = document.querySelector(".modal-return");
-backToWorkManager.addEventListener("click", function (event) {
-  event.preventDefault();
-  resetForm();
-  document.querySelector(".modal").style.visibility = "visible";
-  document.querySelector(".modal").style.opacity = "1";
-  document.querySelector(".modal-add").style.visibility = "hidden";
-  document.querySelector(".modal-add").style.opacity = "0";
-});
+function listenerBackArrowModal() {
+  const backToWorkManager = document.querySelector(".modal-return");
+  backToWorkManager.addEventListener("click", function (event) {
+    event.preventDefault();
+    resetForm();
+    document.querySelector(".modal").style.visibility = "visible";
+    document.querySelector(".modal").style.opacity = "1";
+    document.querySelector(".modal-add").style.visibility = "hidden";
+    document.querySelector(".modal-add").style.opacity = "0";
+  });
+}
 
 function listenerCloseAddWorkModal() {
   const closeModal = document.querySelector(".modal_close");
