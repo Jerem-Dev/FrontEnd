@@ -207,7 +207,14 @@ li.actual-page {
 }
 #portfolio h2 {
   text-align: center;
-  margin-bottom: 1em;
+  /* margin-bottom: 1em; */
+}
+.projets {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 50px;
 }
 
 .filter-container {
@@ -264,12 +271,15 @@ li.actual-page {
 #login > * {
   text-align: center;
 }
+
 #contact h2 {
   margin-bottom: 20px;
 }
+
 #login h2 {
   margin-top: 100px;
 }
+
 #contact form,
 #login form {
   text-align: left;
@@ -277,6 +287,7 @@ li.actual-page {
   display: flex;
   flex-direction: column;
 }
+
 #login form {
   margin-top: 0px;
 }
@@ -284,6 +295,7 @@ li.actual-page {
 #login a {
   text-align: center;
 }
+
 #contact input,
 #login input {
   height: 50px;
@@ -291,10 +303,12 @@ li.actual-page {
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
 #contact label,
 #login label {
   margin: 2em 0 1em 0;
 }
+
 #contact textarea {
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -319,4 +333,187 @@ footer nav ul {
   display: flex;
   justify-content: flex-end;
   margin: 2em;
+}
+
+/* Modal window */
+.modal,
+.modal-add {
+  visibility: hidden;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(77, 77, 77, 0.7);
+}
+
+.modal_container {
+  position: relative;
+  border-radius: 4px;
+  width: 550px;
+  max-width: 90%;
+  background: white;
+  padding: 30px 100px;
+}
+.modal_title {
+  width: 100%;
+  font-size: 26px;
+  text-align: center;
+  margin: 25px 0 50px;
+}
+
+.modal_gallery {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.content_img {
+  position: relative;
+  height: auto;
+  width: 18%;
+}
+
+.img-works-manager {
+  height: auto;
+  width: 100%;
+  margin: 0px 10px;
+}
+
+.modal_close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  text-decoration: none;
+  font-weight: bolder;
+  font-size: 25px;
+}
+
+.modal-return {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  text-decoration: none;
+  font-weight: bolder;
+  font-size: 25px;
+}
+
+.modal_trash {
+  position: absolute;
+  top: 5px;
+  right: -5px;
+  height: 15px;
+  width: 15px;
+  background-color: black;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+.modal_trash:hover {
+  background-color: gray;
+  cursor: pointer;
+}
+
+.modal-button-container {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 50px;
+  border-top: solid lightgray 1px;
+  padding-top: 50px;
+}
+
+.modal-button {
+  border-radius: 60px;
+  width: 237px;
+  height: 36px;
+  font-family: "Syne";
+  border: none;
+  background-color: #1d6154;
+  color: white;
+}
+
+.modal-button:hover {
+  filter: brightness(1.2);
+  cursor: pointer;
+}
+
+#add-photo-form input,
+#add-photo-form select {
+  height: 50px;
+  font-size: 1.2em;
+  border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  width: 100%;
+  margin-top: 10px;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 0;
+  text-indent: 15px;
+}
+
+#add-photo-form input {
+  margin-bottom: 30px;
+}
+
+#add-photo-form label {
+  padding-bottom: 20px;
+}
+
+#image-upload-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: #e8f1f6;
+  border-radius: 3px;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+
+#image-upload-container p {
+  font-size: 10px;
+  font-weight: 400;
+}
+
+#image-upload-container span {
+  background-color: #cbd6dc;
+  color: #306685;
+  padding: 10px 50px;
+  margin: 10px 0;
+  border-radius: 50px;
+}
+
+#image-upload-container img {
+  height: 76px;
+  width: 76px;
+}
+
+.image-upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#image-preview {
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  bottom: 0;
+}
+
+#image-preview img {
+  height: 100%;
+  width: auto;
+}
+
+#photo {
+  display: none;
 }
