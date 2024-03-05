@@ -162,11 +162,46 @@ function addWorkFormModal() {
   const submitAddButton = document.createElement("button");
   submitAddButton.className = "modal-button";
   submitAddButton.id = "submit-work";
+  submitAddButton.onclick = addPhoto;
   submitAddButton.style.backgroundColor = "#A7A7A7";
   submitAddButton.textContent = "Valider";
   addButtonContainer.appendChild(submitAddButton);
 
   listenerCloseAddWorkModal();
+}
+
+async function addPhoto() {
+  const form = document.getElementById("add-photo-form");
+  const title = document.getElementById("title").value;
+  const category = document.getElementById("category").value;
+  const photo = document.getElementById("photo").files[0];
+
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("category", category);
+  formData.append("image", photo);
+
+  try {
+    const response = await fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error("Erreur du serveur : " + response.status);
+    }
+    alert("Photo envoyée avec succès !");
+    form.reset();
+
+    document.querySelector(".modal_container").innerHTML = "";
+    document.querySelector(".gallery").innerHTML = "";
+    await updateWorksManagerGallery();
+    await updateGalleryCurrentFilter();
+  } catch (error) {
+    console.error("Erreur:", error);
+  }
 }
 //-----------------USER AUTHENFICATION CHECK---------------//
 
