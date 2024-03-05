@@ -148,6 +148,7 @@ function addWorkFormModal() {
   <div>
       <label for="category">Categorie :</label>
       <select id="category" name="category" required>
+          <option style="display:none" disabled selected value></option>
           <option value="1">Objets</option>
           <option value="2">Appartements</option>
           <option value="3">Hôtels & restaurants</option>
@@ -171,8 +172,12 @@ function addWorkFormModal() {
   formListener();
 }
 
-async function addPhoto() {
+function resetForm() {
   const form = document.getElementById("add-photo-form");
+  form.reset();
+}
+
+async function addPhoto() {
   const submitAddButton = document.getElementById("submit-work");
   const title = document.getElementById("title").value;
   const category = document.getElementById("category").value;
@@ -195,7 +200,7 @@ async function addPhoto() {
       throw new Error("Erreur du serveur : " + response.status);
     }
     alert("Photo envoyée avec succès !");
-    form.reset();
+    resetForm();
     submitAddButton.style.backgroundColor = "#A7A7A7";
     submitAddButton.onclick = null;
 
@@ -278,6 +283,7 @@ function listerButtonAddWork() {
   const buttonAddWork = document.getElementById("add-work");
   buttonAddWork.addEventListener("click", function (event) {
     event.preventDefault();
+    resetForm();
     document.querySelector(".modal").style.visibility = "hidden";
     document.querySelector(".modal").style.opacity = "0";
     document.querySelector(".modal-add").style.visibility = "visible";
@@ -288,6 +294,7 @@ function listerButtonAddWork() {
 const backToWorkManager = document.querySelector(".modal-return");
 backToWorkManager.addEventListener("click", function (event) {
   event.preventDefault();
+  resetForm();
   document.querySelector(".modal").style.visibility = "visible";
   document.querySelector(".modal").style.opacity = "1";
   document.querySelector(".modal-add").style.visibility = "hidden";
