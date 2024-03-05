@@ -167,7 +167,6 @@ function addWorkFormModal() {
   const submitAddButton = document.createElement("button");
   submitAddButton.className = "modal-button";
   submitAddButton.id = "submit-work";
-  // submitAddButton.onclick = addPhoto;
   submitAddButton.style.backgroundColor = "#A7A7A7";
   submitAddButton.textContent = "Valider";
   addButtonContainer.appendChild(submitAddButton);
@@ -296,34 +295,47 @@ if (logged) {
 }
 
 //--------------WORK GALLERY DELETE OPEN/CLOSE---------------//
+function hideModal() {
+  document.querySelector(".modal").style.visibility = "hidden";
+  document.querySelector(".modal").style.opacity = "0";
+}
+function showModal() {
+  document.querySelector(".modal").style.visibility = "visible";
+  document.querySelector(".modal").style.opacity = "1";
+}
 
 //Events for open or close modal window
 worksManager.addEventListener("click", function (event) {
   event.preventDefault();
-  document.querySelector(".modal").style.visibility = "visible";
-  document.querySelector(".modal").style.opacity = "1";
+  showModal();
 });
 
 function listenerCloseModal() {
   const closeModal = document.querySelector(".modal_close");
   closeModal.addEventListener("click", function (event) {
     event.preventDefault();
-    document.querySelector(".modal").style.visibility = "hidden";
-    document.querySelector(".modal").style.opacity = "0";
+    hideModal();
   });
 }
 
 //-------------------WORK MANAGER ADD OPEN/CLOSE----------------------//
+function showAddModal() {
+  document.querySelector(".modal-add").style.visibility = "visible";
+  document.querySelector(".modal-add").style.opacity = "1";
+}
+
+function hideAddModal() {
+  document.querySelector(".modal-add").style.visibility = "hidden";
+  document.querySelector(".modal-add").style.opacity = "0";
+}
 
 function listerButtonAddWork() {
   const buttonAddWork = document.getElementById("add-work");
   buttonAddWork.addEventListener("click", function (event) {
     event.preventDefault();
     resetForm();
-    document.querySelector(".modal").style.visibility = "hidden";
-    document.querySelector(".modal").style.opacity = "0";
-    document.querySelector(".modal-add").style.visibility = "visible";
-    document.querySelector(".modal-add").style.opacity = "1";
+    hideModal();
+    showAddModal();
   });
 }
 
@@ -332,10 +344,8 @@ function listenerBackArrowModal() {
   backToWorkManager.addEventListener("click", function (event) {
     event.preventDefault();
     resetForm();
-    document.querySelector(".modal").style.visibility = "visible";
-    document.querySelector(".modal").style.opacity = "1";
-    document.querySelector(".modal-add").style.visibility = "hidden";
-    document.querySelector(".modal-add").style.opacity = "0";
+    showModal();
+    hideAddModal();
   });
 }
 
@@ -343,8 +353,7 @@ function listenerCloseAddWorkModal() {
   const closeModal = document.querySelector(".modal_close");
   closeModal.addEventListener("click", function (event) {
     event.preventDefault();
-    document.querySelector(".modal-add").style.visibility = "hidden";
-    document.querySelector(".modal-add").style.opacity = "0";
+    hideAddModal();
   });
 }
 //-----------------------------WORKS FILTERS----------------------------------------//
