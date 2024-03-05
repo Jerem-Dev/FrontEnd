@@ -442,6 +442,6 @@ footer nav ul {
 }
 
 .modal-button:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.2);
   cursor: pointer;
 }

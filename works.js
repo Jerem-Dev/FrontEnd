@@ -162,16 +162,18 @@ function addWorkFormModal() {
   const submitAddButton = document.createElement("button");
   submitAddButton.className = "modal-button";
   submitAddButton.id = "submit-work";
-  submitAddButton.onclick = addPhoto;
+  // submitAddButton.onclick = addPhoto;
   submitAddButton.style.backgroundColor = "#A7A7A7";
   submitAddButton.textContent = "Valider";
   addButtonContainer.appendChild(submitAddButton);
 
   listenerCloseAddWorkModal();
+  formListener();
 }
 
 async function addPhoto() {
   const form = document.getElementById("add-photo-form");
+  const submitAddButton = document.getElementById("submit-work");
   const title = document.getElementById("title").value;
   const category = document.getElementById("category").value;
   const photo = document.getElementById("photo").files[0];
@@ -194,6 +196,8 @@ async function addPhoto() {
     }
     alert("Photo envoyée avec succès !");
     form.reset();
+    submitAddButton.style.backgroundColor = "#A7A7A7";
+    submitAddButton.onclick = "";
 
     document.querySelector(".modal_container").innerHTML = "";
     document.querySelector(".gallery").innerHTML = "";
@@ -203,6 +207,38 @@ async function addPhoto() {
     console.error("Erreur:", error);
   }
 }
+
+function checkForm() {
+  const submitAddButton = document.getElementById("submit-work");
+  const checkTitle = document.getElementById("title").value;
+  const checkCategory = document.getElementById("category").value;
+  const CheckPhoto = document.getElementById("photo").files[0];
+
+  if (checkTitle && checkCategory && CheckPhoto) {
+    submitAddButton.style.backgroundColor = "#1d6154";
+    submitAddButton.onclick = addPhoto;
+  } else {
+    submitAddButton.style.backgroundColor = "#A7A7A7";
+    submitAddButton.onclick = "";
+  }
+}
+
+function formListener() {
+  const titleInput = document.getElementById("title");
+  const categoryInput = document.getElementById("category");
+  const photoInput = document.getElementById("photo");
+
+  if (photoInput) {
+    photoInput.addEventListener("change", checkForm);
+  }
+  if (titleInput) {
+    titleInput.addEventListener("change", checkForm);
+  }
+  if (categoryInput) {
+    categoryInput.addEventListener("change", checkForm);
+  }
+}
+
 //-----------------USER AUTHENFICATION CHECK---------------//
 
 //Control if user is connected (true) or not (false)
