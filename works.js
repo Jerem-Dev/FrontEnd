@@ -197,7 +197,7 @@ async function addPhoto() {
     alert("Photo envoyée avec succès !");
     form.reset();
     submitAddButton.style.backgroundColor = "#A7A7A7";
-    submitAddButton.onclick = "";
+    submitAddButton.onclick = null;
 
     document.querySelector(".modal_container").innerHTML = "";
     document.querySelector(".gallery").innerHTML = "";
@@ -219,7 +219,7 @@ function checkForm() {
     submitAddButton.onclick = addPhoto;
   } else {
     submitAddButton.style.backgroundColor = "#A7A7A7";
-    submitAddButton.onclick = "";
+    submitAddButton.onclick = null;
   }
 }
 
