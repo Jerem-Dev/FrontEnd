@@ -137,10 +137,16 @@ function addWorkFormModal() {
   modalFormContainer.innerHTML = `
   <form id="add-photo-form" enctype="multipart/form-data">
   <p class="modal_title">Ajout photo</p>
-  <div>
-      <label for="photo">Photo:</label>
-      <input type="file" id="photo" name="photo" accept=".png, .jpg" required>
+  <div id="image-upload-container">
+  <div id="image-preview"></div>
+  <div class="image-upload-content">
+  <img src="assets/icons/image-regular.svg" />
+  <span>+ Ajouter une image</span>
+  <p>jpg, png: max 4mo</p>
   </div>
+  <input type="file" id="photo" name="photo" accept=".png, .jpg" required>
+</div>
+
   <div>
       <label for="title">Titre:</label>
       <input type="text" id="title" name="title" required>
@@ -170,11 +176,44 @@ function addWorkFormModal() {
 
   listenerCloseAddWorkModal();
   formListener();
+  listenerPhotoUpload();
 }
 
 function resetForm() {
   const form = document.getElementById("add-photo-form");
+  const imgForm = document.getElementById("image-preview");
+  const containerContent = document.querySelector(".image-upload-content");
   form.reset();
+  imgForm.innerHTML = "";
+  containerContent.style.visibility = "visible";
+}
+
+function listenerPhotoUpload() {
+  document
+    .getElementById("image-upload-container")
+    .addEventListener("click", function () {
+      document.getElementById("photo").click();
+    });
+
+  document.getElementById("photo").addEventListener("change", function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const imgElement = document.createElement("img");
+        imgElement.src = event.target.result; // Définit la source de l'img avec l'URL de l'image lue
+
+        const previewContainer = document.getElementById("image-preview");
+        previewContainer.innerHTML = "";
+        previewContainer.appendChild(imgElement);
+        const containerContent = document.querySelector(
+          ".image-upload-content"
+        );
+        containerContent.style.visibility = "hidden";
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 }
 
 async function addPhoto() {
