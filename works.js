@@ -46,16 +46,22 @@ updateWorks(works);
 //---------------------WORK MANAGER DELETE---------------------------//
 
 //Create the "modifier" link
-const portfolio = document.querySelector(".projets");
-const worksManager = document.createElement("a");
-const imgWorksManager = document.createElement("img");
-imgWorksManager.src = "assets/icons/pen-to-square-regular.svg";
-imgWorksManager.style.height = "15px";
-imgWorksManager.style.width = "15px";
-imgWorksManager.style.marginRight = "5px";
-worksManager.innerText = "modifier";
-worksManager.href = "#";
-worksManager.style.marginLeft = "15px";
+function modalLinkAccess() {
+  const portfolio = document.querySelector(".projets");
+  const worksManager = document.createElement("a");
+  const imgWorksManager = document.createElement("img");
+  imgWorksManager.src = "assets/icons/pen-to-square-regular.svg";
+  imgWorksManager.style.height = "15px";
+  imgWorksManager.style.width = "15px";
+  imgWorksManager.style.marginRight = "5px";
+  worksManager.className = "modal-link";
+  worksManager.innerText = "modifier";
+  worksManager.href = "#";
+  worksManager.style.marginLeft = "15px";
+  portfolio.appendChild(worksManager);
+  worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
+  listenerOpenModal();
+}
 
 //WORK MANAGER CONSTRUCTOR : Show gallery and add possibility to delete one or several work
 async function updateWorksManagerGallery() {
@@ -202,7 +208,7 @@ function listenerPhotoUpload() {
       const reader = new FileReader();
       reader.onload = function (event) {
         const imgElement = document.createElement("img");
-        imgElement.src = event.target.result; // Définit la source de l'img avec l'URL de l'image lue
+        imgElement.src = event.target.result;
 
         const previewContainer = document.getElementById("image-preview");
         previewContainer.innerHTML = "";
@@ -290,8 +296,9 @@ const logged = isLogged();
 
 //Show the link to worksManager and retrieve his content only if user is connected
 if (logged) {
-  portfolio.appendChild(worksManager);
-  worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
+  // portfolio.appendChild(worksManager);
+  // worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
+  modalLinkAccess();
   updateWorksManagerGallery();
   addWorkFormModal();
 }
@@ -307,10 +314,13 @@ function showModal() {
 }
 
 //Events for open or close modal window
-worksManager.addEventListener("click", function (event) {
-  event.preventDefault();
-  showModal();
-});
+function listenerOpenModal() {
+  const worksManager = document.querySelector(".modal-link");
+  worksManager.addEventListener("click", function (event) {
+    event.preventDefault();
+    showModal();
+  });
+}
 
 function listenerCloseModal() {
   const closeModal = document.querySelector(".modal_close");
