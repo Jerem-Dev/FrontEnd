@@ -111,15 +111,27 @@ function listenerDeleteWork() {
   const trashIcons = document.querySelectorAll(".modal_trash");
   trashIcons.forEach((trashIcon) => {
     trashIcon.addEventListener("click", async function () {
-      await fetch(`http://localhost:5678/api/works/${this.id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      cleanGalleries();
-      await updateWorksManagerGallery();
-      await updateGalleryCurrentFilter();
+      try {
+        const response = await fetch(
+          `http://localhost:5678/api/works/${this.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(" Error : " + response.status);
+        }
+
+        cleanGalleries();
+        await updateWorksManagerGallery();
+        await updateGalleryCurrentFilter();
+      } catch (error) {
+        console.error("Failed to delete work: ", error);
+      }
     });
   });
 }
@@ -244,7 +256,7 @@ async function addPhoto() {
       body: formData,
     });
     if (!response.ok) {
-      throw new Error("Erreur du serveur : " + response.status);
+      throw new Error("Error: " + response.status);
     }
     alert("Photo envoyée avec succès !");
     resetForm();
@@ -255,7 +267,7 @@ async function addPhoto() {
     await updateWorksManagerGallery();
     await updateGalleryCurrentFilter();
   } catch (error) {
-    console.error("Erreur:", error);
+    console.error("Failed to add work :", error);
   }
 }
 
@@ -297,8 +309,6 @@ const logged = isLogged();
 
 //Show the link to worksManager and retrieve his content only if user is connected
 if (logged) {
-  // portfolio.appendChild(worksManager);
-  // worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
   modalLinkAccess();
   updateWorksManagerGallery();
   addWorkFormModal();
