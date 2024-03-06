@@ -24,7 +24,7 @@ let works = await fetchWorks();
 
 //---------------------GALLERY -------------------//
 
-//Update the DOM by creating a <figure> for each works
+//Update the DOM to show work gallery
 export function updateWorks(works) {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = "";
@@ -64,7 +64,7 @@ function modalLinkAccess() {
   listenerOpenModal();
 }
 
-//WORK MANAGER CONSTRUCTOR : Show gallery and add possibility to delete one or several work
+//Constructor work delete manager : show latest work gallery and add possibility to delete one or several work(s)
 async function updateWorksManagerGallery() {
   const upToDateWorks = await refreshWorks();
   const modalContainer = document.querySelector(".modal_container");
@@ -141,6 +141,7 @@ function cleanGalleries() {
 }
 
 //---------------------WORK MANAGER ADD--------------------//
+//Form constructor for adding a work
 function addWorkFormModal() {
   const workAddManager = document.querySelector(".modal-add-container");
   workAddManager.innerHTML = ` 
@@ -302,21 +303,19 @@ function formListener() {
   }
 }
 
-//-----------------USER AUTHENFICATION CHECK---------------//
+//-----------------USER AUTHENTIFICATION CHECK---------------//
 
-//Control if user is connected (true) or not (false)
+//Control if user is connected
 const logged = isLogged();
 
-//Show the link to worksManager and retrieve his content only if user is connected
+//Show the link to worksManager and retrieve his content if user is connected
 if (logged) {
   modalLinkAccess();
   updateWorksManagerGallery();
   addWorkFormModal();
 }
 
-//--------------WORK GALLERY DELETE OPEN/CLOSE---------------//
-
-//Events for open or close modal window
+//--------------WORK GALLERY MANAGER OPEN/CLOSE---------------//
 function listenerOpenModal() {
   const worksManager = document.querySelector(".modal-link");
   worksManager.addEventListener("click", function (event) {
@@ -334,7 +333,6 @@ function listenerCloseModal() {
   });
 }
 
-//-------------------WORK MANAGER ADD OPEN/CLOSE----------------------//
 function toggleModal(modalSelected, show) {
   const modal = document.querySelector(modalSelected);
   modal.style.visibility = show ? "visible" : "hidden";
