@@ -1,5 +1,6 @@
 import { isLogged } from "/authentification.js";
 import { token } from "/authentification.js";
+import { updateGalleryCurrentFilter } from "/filter.js";
 
 //Get all the works stored in the API and transform the data in JSON
 async function fetchWorks() {
@@ -14,7 +15,7 @@ async function fetchWorks() {
 }
 
 //Function for refreshing gallery automatically when user delete one item
-async function refreshWorks() {
+export async function refreshWorks() {
   const works = await fetchWorks();
   return works;
 }
@@ -24,7 +25,7 @@ let works = await fetchWorks();
 //---------------------GALLERY -------------------//
 
 //Update the DOM by creating a <figure> for each works
-function updateWorks(works) {
+export function updateWorks(works) {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = "";
 
@@ -368,75 +369,3 @@ function listenerCloseAddWorkModal() {
     hideAddModal();
   });
 }
-//-----------------------------WORKS FILTERS----------------------------------------//
-//CategoryId definition => 1 : Objects | 2 : Appartments | 3 Hotel & restaurant
-let currentFilter = "all";
-
-//Reminder of current filter to update correctly the gallery when a work is added or deleted
-async function updateGalleryCurrentFilter() {
-  const upToDateWorks = await refreshWorks();
-  switch (currentFilter) {
-    case "all":
-      updateWorks(upToDateWorks);
-      break;
-    case "objects":
-      const objectsWorks = upToDateWorks.filter(
-        (work) => work.categoryId === 1
-      );
-      updateWorks(objectsWorks);
-      break;
-    case "appartment":
-      const appartmentWorks = upToDateWorks.filter(
-        (work) => work.categoryId === 2
-      );
-      updateWorks(appartmentWorks);
-      break;
-    case "hotel-restaurant":
-      const hotelRestaurantWorks = upToDateWorks.filter(
-        (work) => work.categoryId === 3
-      );
-      updateWorks(hotelRestaurantWorks);
-      break;
-  }
-}
-
-// Show all works
-const allFilter = document.querySelector("#all");
-allFilter.addEventListener("click", async function () {
-  currentFilter = "all";
-  const upToDateWorks = await refreshWorks();
-  document.querySelector(".gallery").innerHTML = "";
-  updateWorks(upToDateWorks);
-});
-
-// Sort works to show objects
-const objectsFilter = document.querySelector("#objects");
-objectsFilter.addEventListener("click", async function () {
-  currentFilter = "objects";
-  const upToDateWorks = await refreshWorks();
-  const objectsWorks = upToDateWorks.filter((work) => work.categoryId === 1);
-  document.querySelector(".gallery").innerHTML = "";
-  updateWorks(objectsWorks);
-});
-
-//Sort works to show appartments
-const appartmentFilter = document.querySelector("#appartment");
-appartmentFilter.addEventListener("click", async function () {
-  currentFilter = "appartment";
-  const upToDateWorks = await refreshWorks();
-  const appartmentWorks = upToDateWorks.filter((work) => work.categoryId === 2);
-  document.querySelector(".gallery").innerHTML = "";
-  updateWorks(appartmentWorks);
-});
-
-//Sort works to show hotels and restaurants
-const hotelRestaurantFilter = document.querySelector("#hotel-restaurant");
-hotelRestaurantFilter.addEventListener("click", async function () {
-  currentFilter = "hotel-restaurant";
-  const upToDateWorks = await refreshWorks();
-  const hotelRestaurantWorks = upToDateWorks.filter(
-    (work) => work.categoryId === 3
-  );
-  document.querySelector(".gallery").innerHTML = "";
-  updateWorks(hotelRestaurantWorks);
-});
