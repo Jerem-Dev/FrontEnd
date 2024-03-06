@@ -193,7 +193,7 @@ function addWorkFormModal() {
   submitAddButton.textContent = "Valider";
   addButtonContainer.appendChild(submitAddButton);
 
-  listenerCloseAddWorkModal();
+  listenerCloseModal();
   listenerBackArrowModal();
   formListener();
   listenerPhotoUpload();
@@ -338,6 +338,7 @@ function listenerCloseModal() {
   closeModal.addEventListener("click", function (event) {
     event.preventDefault();
     hideModal();
+    hideAddModal();
   });
 }
 
@@ -368,14 +369,6 @@ function listenerBackArrowModal() {
     event.preventDefault();
     resetForm();
     showModal();
-    hideAddModal();
-  });
-}
-
-function listenerCloseAddWorkModal() {
-  const closeModal = document.querySelector(".modal_close");
-  closeModal.addEventListener("click", function (event) {
-    event.preventDefault();
     hideAddModal();
   });
 }
