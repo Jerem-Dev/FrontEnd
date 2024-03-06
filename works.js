@@ -332,6 +332,9 @@ function toggleModal(modalSelected, show) {
   const modal = document.querySelector(modalSelected);
   modal.style.visibility = show ? "visible" : "hidden";
   modal.style.opacity = show ? "1" : "0";
+  if (document.querySelector(".image-upload-content")) {
+    document.querySelector(".image-upload-content").style.visibility = "hidden";
+  }
 }
 
 function listerButtonAddWork() {
@@ -341,6 +344,8 @@ function listerButtonAddWork() {
     resetForm();
     toggleModal(".modal", false);
     toggleModal(".modal-add", true);
+    document.querySelector(".image-upload-content").style.visibility =
+      "visible";
   });
 }
 
