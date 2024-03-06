@@ -1,5 +1,5 @@
-import { isLogged } from "/authentification.js";
-import { token } from "/authentification.js";
+import { logged } from "/authentification.js";
+import { updateGalleryCurrentFilter } from "/filter.js";
 
 //Get all the works stored in the API and transform the data in JSON
 async function fetchWorks() {
@@ -14,19 +14,25 @@ async function fetchWorks() {
 }
 
 //Function for refreshing gallery automatically when user delete one item
-async function refreshWorks() {
+export async function refreshWorks() {
   const works = await fetchWorks();
   return works;
 }
 
 let works = await fetchWorks();
 
-console.table(works);
+//-----------------USER AUTHENTIFICATION CHECK---------------//
+//Show the link to worksManager and retrieve his content if user is connected
+if (logged) {
+  modalLinkAccess();
+  updateWorksManagerGallery();
+  addWorkFormModal();
+}
 
 //---------------------GALLERY -------------------//
 
-//Update the DOM by creating a <figure> for each works
-function updateWorks(works) {
+//Update the DOM to show work gallery
+export function updateWorks(works) {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = "";
 
@@ -45,21 +51,27 @@ function updateWorks(works) {
 
 updateWorks(works);
 
-//---------------------WORK MANAGER DELETE---------------------------//
+//---------------------WORK MANAGER DELETE WORK---------------------------//
 
 //Create the "modifier" link
-const portfolio = document.querySelector(".projets");
-const worksManager = document.createElement("a");
-const imgWorksManager = document.createElement("img");
-imgWorksManager.src = "assets/icons/pen-to-square-regular.svg";
-imgWorksManager.style.height = "15px";
-imgWorksManager.style.width = "15px";
-imgWorksManager.style.marginRight = "5px";
-worksManager.innerText = "modifier";
-worksManager.href = "#";
-worksManager.style.marginLeft = "15px";
+function modalLinkAccess() {
+  const portfolio = document.querySelector(".projets");
+  const worksManager = document.createElement("a");
+  const imgWorksManager = document.createElement("img");
+  imgWorksManager.src = "assets/icons/pen-to-square-regular.svg";
+  imgWorksManager.style.height = "15px";
+  imgWorksManager.style.width = "15px";
+  imgWorksManager.style.marginRight = "5px";
+  worksManager.className = "modal-link";
+  worksManager.innerText = "modifier";
+  worksManager.href = "#";
+  worksManager.style.marginLeft = "15px";
+  portfolio.appendChild(worksManager);
+  worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
+  listenerOpenModal();
+}
 
-//WORK MANAGER CONSTRUCTOR : Show gallery and add possibility to delete one or several work
+//Constructor work delete manager : show latest work gallery and add possibility to delete one or several work(s)
 async function updateWorksManagerGallery() {
   const upToDateWorks = await refreshWorks();
   const modalContainer = document.querySelector(".modal_container");
@@ -106,21 +118,37 @@ function listenerDeleteWork() {
   const trashIcons = document.querySelectorAll(".modal_trash");
   trashIcons.forEach((trashIcon) => {
     trashIcon.addEventListener("click", async function () {
-      await fetch(`http://localhost:5678/api/works/${this.id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      document.querySelector(".modal_container").innerHTML = "";
-      document.querySelector(".gallery").innerHTML = "";
-      await updateWorksManagerGallery();
-      await updateGalleryCurrentFilter();
+      try {
+        const response = await fetch(
+          `http://localhost:5678/api/works/${this.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(" Error : " + response.status);
+        }
+
+        cleanGalleries();
+        await updateWorksManagerGallery();
+        await updateGalleryCurrentFilter();
+      } catch (error) {
+        console.error("Failed to delete work: ", error);
+      }
     });
   });
 }
+function cleanGalleries() {
+  document.querySelector(".modal_container").innerHTML = "";
+  document.querySelector(".gallery").innerHTML = "";
+}
 
-//---------------------WORK MANAGER ADD--------------------//
+//---------------------WORK MANAGER ADD WORK--------------------//
+//Form constructor for adding a work
 function addWorkFormModal() {
   const workAddManager = document.querySelector(".modal-add-container");
   workAddManager.innerHTML = ` 
@@ -169,12 +197,12 @@ function addWorkFormModal() {
   const submitAddButton = document.createElement("button");
   submitAddButton.className = "modal-button";
   submitAddButton.id = "submit-work";
-  // submitAddButton.onclick = addPhoto;
   submitAddButton.style.backgroundColor = "#A7A7A7";
   submitAddButton.textContent = "Valider";
   addButtonContainer.appendChild(submitAddButton);
 
-  listenerCloseAddWorkModal();
+  listenerCloseModal();
+  listenerBackArrowModal();
   formListener();
   listenerPhotoUpload();
 }
@@ -201,7 +229,7 @@ function listenerPhotoUpload() {
       const reader = new FileReader();
       reader.onload = function (event) {
         const imgElement = document.createElement("img");
-        imgElement.src = event.target.result; // Définit la source de l'img avec l'URL de l'image lue
+        imgElement.src = event.target.result;
 
         const previewContainer = document.getElementById("image-preview");
         previewContainer.innerHTML = "";
@@ -236,19 +264,18 @@ async function addPhoto() {
       body: formData,
     });
     if (!response.ok) {
-      throw new Error("Erreur du serveur : " + response.status);
+      throw new Error("Error: " + response.status);
     }
     alert("Photo envoyée avec succès !");
     resetForm();
     submitAddButton.style.backgroundColor = "#A7A7A7";
     submitAddButton.onclick = null;
 
-    document.querySelector(".modal_container").innerHTML = "";
-    document.querySelector(".gallery").innerHTML = "";
+    cleanGalleries();
     await updateWorksManagerGallery();
     await updateGalleryCurrentFilter();
   } catch (error) {
-    console.error("Erreur:", error);
+    console.error("Failed to add work :", error);
   }
 }
 
@@ -283,140 +310,46 @@ function formListener() {
   }
 }
 
-//-----------------USER AUTHENFICATION CHECK---------------//
-
-//Control if user is connected (true) or not (false)
-const logged = isLogged();
-console.log(logged);
-
-//Show the link to worksManager and retrieve his content only if user is connected
-if (logged) {
-  portfolio.appendChild(worksManager);
-  worksManager.insertAdjacentElement("afterbegin", imgWorksManager);
-  updateWorksManagerGallery();
-  addWorkFormModal();
+//--------------WORK GALLERY MANAGER OPEN/CLOSE---------------//
+function listenerOpenModal() {
+  const worksManager = document.querySelector(".modal-link");
+  worksManager.addEventListener("click", function (event) {
+    event.preventDefault();
+    toggleModal(".modal", true);
+  });
 }
-console.log(token);
-
-//--------------WORK GALLERY DELETE OPEN/CLOSE---------------//
-
-//Events for open or close modal window
-worksManager.addEventListener("click", function (event) {
-  event.preventDefault();
-  document.querySelector(".modal").style.visibility = "visible";
-  document.querySelector(".modal").style.opacity = "1";
-});
 
 function listenerCloseModal() {
   const closeModal = document.querySelector(".modal_close");
   closeModal.addEventListener("click", function (event) {
     event.preventDefault();
-    document.querySelector(".modal").style.visibility = "hidden";
-    document.querySelector(".modal").style.opacity = "0";
+    toggleModal(".modal", false);
+    toggleModal(".modal-add", false);
   });
 }
 
-//-------------------WORK MANAGER ADD OPEN/CLOSE----------------------//
+function toggleModal(modalSelected, show) {
+  const modal = document.querySelector(modalSelected);
+  modal.style.visibility = show ? "visible" : "hidden";
+  modal.style.opacity = show ? "1" : "0";
+}
 
 function listerButtonAddWork() {
   const buttonAddWork = document.getElementById("add-work");
   buttonAddWork.addEventListener("click", function (event) {
     event.preventDefault();
     resetForm();
-    document.querySelector(".modal").style.visibility = "hidden";
-    document.querySelector(".modal").style.opacity = "0";
-    document.querySelector(".modal-add").style.visibility = "visible";
-    document.querySelector(".modal-add").style.opacity = "1";
+    toggleModal(".modal", false);
+    toggleModal(".modal-add", true);
   });
 }
 
-const backToWorkManager = document.querySelector(".modal-return");
-backToWorkManager.addEventListener("click", function (event) {
-  event.preventDefault();
-  resetForm();
-  document.querySelector(".modal").style.visibility = "visible";
-  document.querySelector(".modal").style.opacity = "1";
-  document.querySelector(".modal-add").style.visibility = "hidden";
-  document.querySelector(".modal-add").style.opacity = "0";
-});
-
-function listenerCloseAddWorkModal() {
-  const closeModal = document.querySelector(".modal_close");
-  closeModal.addEventListener("click", function (event) {
+function listenerBackArrowModal() {
+  const backToWorkManager = document.querySelector(".modal-return");
+  backToWorkManager.addEventListener("click", function (event) {
     event.preventDefault();
-    document.querySelector(".modal-add").style.visibility = "hidden";
-    document.querySelector(".modal-add").style.opacity = "0";
+    resetForm();
+    toggleModal(".modal", true);
+    toggleModal(".modal-add", false);
   });
 }
-//-----------------------------WORKS FILTERS----------------------------------------//
-//CategoryId definition => 1 : Objects | 2 : Appartments | 3 Hotel & restaurant
-let currentFilter = "all";
-
-//Reminder of current filter to update correctly the gallery when a work is added or deleted
-async function updateGalleryCurrentFilter() {
-  const upToDateWorks = await refreshWorks();
-  switch (currentFilter) {
-    case "all":
-      updateWorks(upToDateWorks);
-      break;
-    case "objects":
-      const objectsWorks = upToDateWorks.filter(
-        (work) => work.categoryId === 1
-      );
-      updateWorks(objectsWorks);
-      break;
-    case "appartment":
-      const appartmentWorks = upToDateWorks.filter(
-        (work) => work.categoryId === 2
-      );
-      updateWorks(appartmentWorks);
-      break;
-    case "hotel-restaurant":
-      const hotelRestaurantWorks = upToDateWorks.filter(
-        (work) => work.categoryId === 3
-      );
-      updateWorks(hotelRestaurantWorks);
-      break;
-  }
-}
-
-// Show all works
-const allFilter = document.querySelector("#all");
-allFilter.addEventListener("click", async function () {
-  currentFilter = "all";
-  const upToDateWorks = await refreshWorks();
-  document.querySelector(".gallery").innerHTML = "";
-  updateWorks(upToDateWorks);
-});
-
-// Sort works to show objects
-const objectsFilter = document.querySelector("#objects");
-objectsFilter.addEventListener("click", async function () {
-  currentFilter = "objects";
-  const upToDateWorks = await refreshWorks();
-  const objectsWorks = upToDateWorks.filter((work) => work.categoryId === 1);
-  document.querySelector(".gallery").innerHTML = "";
-  updateWorks(objectsWorks);
-});
-
-//Sort works to show appartments
-const appartmentFilter = document.querySelector("#appartment");
-appartmentFilter.addEventListener("click", async function () {
-  currentFilter = "appartment";
-  const upToDateWorks = await refreshWorks();
-  const appartmentWorks = upToDateWorks.filter((work) => work.categoryId === 2);
-  document.querySelector(".gallery").innerHTML = "";
-  updateWorks(appartmentWorks);
-});
-
-//Sort works to show hotels and restaurants
-const hotelRestaurantFilter = document.querySelector("#hotel-restaurant");
-hotelRestaurantFilter.addEventListener("click", async function () {
-  currentFilter = "hotel-restaurant";
-  const upToDateWorks = await refreshWorks();
-  const hotelRestaurantWorks = upToDateWorks.filter(
-    (work) => work.categoryId === 3
-  );
-  document.querySelector(".gallery").innerHTML = "";
-  updateWorks(hotelRestaurantWorks);
-});
