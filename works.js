@@ -51,7 +51,7 @@ export function updateWorks(works) {
 
 updateWorks(works);
 
-//---------------------WORK MANAGER DELETE---------------------------//
+//---------------------WORK MANAGER DELETE WORK---------------------------//
 
 //Create the "modifier" link
 function modalLinkAccess() {
@@ -147,7 +147,7 @@ function cleanGalleries() {
   document.querySelector(".gallery").innerHTML = "";
 }
 
-//---------------------WORK MANAGER ADD--------------------//
+//---------------------WORK MANAGER ADD WORK--------------------//
 //Form constructor for adding a work
 function addWorkFormModal() {
   const workAddManager = document.querySelector(".modal-add-container");
