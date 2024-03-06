@@ -315,21 +315,13 @@ if (logged) {
 }
 
 //--------------WORK GALLERY DELETE OPEN/CLOSE---------------//
-function hideModal() {
-  document.querySelector(".modal").style.visibility = "hidden";
-  document.querySelector(".modal").style.opacity = "0";
-}
-function showModal() {
-  document.querySelector(".modal").style.visibility = "visible";
-  document.querySelector(".modal").style.opacity = "1";
-}
 
 //Events for open or close modal window
 function listenerOpenModal() {
   const worksManager = document.querySelector(".modal-link");
   worksManager.addEventListener("click", function (event) {
     event.preventDefault();
-    showModal();
+    toggleModal(".modal", true);
   });
 }
 
@@ -337,20 +329,16 @@ function listenerCloseModal() {
   const closeModal = document.querySelector(".modal_close");
   closeModal.addEventListener("click", function (event) {
     event.preventDefault();
-    hideModal();
-    hideAddModal();
+    toggleModal(".modal", false);
+    toggleModal(".modal-add", false);
   });
 }
 
 //-------------------WORK MANAGER ADD OPEN/CLOSE----------------------//
-function showAddModal() {
-  document.querySelector(".modal-add").style.visibility = "visible";
-  document.querySelector(".modal-add").style.opacity = "1";
-}
-
-function hideAddModal() {
-  document.querySelector(".modal-add").style.visibility = "hidden";
-  document.querySelector(".modal-add").style.opacity = "0";
+function toggleModal(modalSelected, show) {
+  const modal = document.querySelector(modalSelected);
+  modal.style.visibility = show ? "visible" : "hidden";
+  modal.style.opacity = show ? "1" : "0";
 }
 
 function listerButtonAddWork() {
@@ -358,8 +346,8 @@ function listerButtonAddWork() {
   buttonAddWork.addEventListener("click", function (event) {
     event.preventDefault();
     resetForm();
-    hideModal();
-    showAddModal();
+    toggleModal(".modal", false);
+    toggleModal(".modal-add", true);
   });
 }
 
@@ -368,7 +356,7 @@ function listenerBackArrowModal() {
   backToWorkManager.addEventListener("click", function (event) {
     event.preventDefault();
     resetForm();
-    showModal();
-    hideAddModal();
+    toggleModal(".modal", true);
+    toggleModal(".modal-add", false);
   });
 }
