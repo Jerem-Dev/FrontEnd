@@ -1,5 +1,4 @@
-import { isLogged } from "/authentification.js";
-import { token } from "/authentification.js";
+import { logged } from "/authentification.js";
 import { updateGalleryCurrentFilter } from "/filter.js";
 
 //Get all the works stored in the API and transform the data in JSON
@@ -21,6 +20,14 @@ export async function refreshWorks() {
 }
 
 let works = await fetchWorks();
+
+//-----------------USER AUTHENTIFICATION CHECK---------------//
+//Show the link to worksManager and retrieve his content if user is connected
+if (logged) {
+  modalLinkAccess();
+  updateWorksManagerGallery();
+  addWorkFormModal();
+}
 
 //---------------------GALLERY -------------------//
 
@@ -301,18 +308,6 @@ function formListener() {
   if (categoryInput) {
     categoryInput.addEventListener("change", checkForm);
   }
-}
-
-//-----------------USER AUTHENTIFICATION CHECK---------------//
-
-//Control if user is connected
-const logged = isLogged();
-
-//Show the link to worksManager and retrieve his content if user is connected
-if (logged) {
-  modalLinkAccess();
-  updateWorksManagerGallery();
-  addWorkFormModal();
 }
 
 //--------------WORK GALLERY MANAGER OPEN/CLOSE---------------//

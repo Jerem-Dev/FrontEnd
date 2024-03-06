@@ -17,4 +17,6 @@ export function isLogged() {
     return false;
   }
 }
-isLogged();
+
+//Control if user is logged
+export const logged = isLogged();
