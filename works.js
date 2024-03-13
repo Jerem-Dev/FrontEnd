@@ -1,4 +1,4 @@
-import { logged } from "/authentification.js";
+import { logged, token } from "/authentification.js";
 import { updateGalleryCurrentFilter } from "/filter.js";
 
 //Get all the works stored in the API and transform the data in JSON
@@ -93,7 +93,7 @@ async function updateWorksManagerGallery() {
   linkAddWork.id = "add-work";
   linkContainer.appendChild(linkAddWork);
 
-  const modalGalleryContent = document.querySelector(".modal_gallery");
+  const modalGalleryContent = modalGallery; //document.querySelector(".modal_gallery");
   upToDateWorks.forEach((work) => {
     const divImgContent = document.createElement("div");
     const imgModal = document.createElement("img");
